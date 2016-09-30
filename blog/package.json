@@ -1,0 +1,29 @@
+{
+  "name": "psikon-blog",
+  "version": "1.0.0",
+  "description": "Psikon Blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "browserify": "^13.1.0",
+    "imagesloaded": "^4.1.1",
+    "slicknav": "^1.0.8"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-downloadfile": "^0.3.2",
+    "grunt-header": "^1.1.0",
+    "grunt-sass": "^1.2.1",
+    "grunt-spritesmith": "^6.3.1",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}
