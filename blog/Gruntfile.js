@@ -8,13 +8,10 @@ var config = {
     build: ['<%= themeDir %>/style.css','<%= themeDir %>/js/main.js']
   },
   
-  downloadFile: {
+  curl: {
 	  wordpress: {
-		  files: [{
-			  url: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
-			  dest: 'build/downloads',
-			  name: 'fluida.zip'
-		  }]
+		  src: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
+		  dest: 'build/downloads/fluida.zip'
 	  }
   },
 
@@ -105,6 +102,13 @@ var config = {
     	  expand: false
       }]
     }
+  },
+  
+  unzip: {
+	  fluida: {
+		  src: 'build/downloads/fluida.zip',
+		  dest: '<%= themeDir %>'
+	  }
   }
 }
 
@@ -117,7 +121,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig(config);
 
-  grunt.registerTask('init', ['downloadFile:wordpress']);
+  grunt.registerTask('init', ['curl:wordpress']);
   
   grunt.registerTask('build', ['browserify:dist','sass:dist','header:dist','copy']);
 
