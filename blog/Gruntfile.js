@@ -5,14 +5,20 @@ var config = {
   cssHeader: require('./cssHeader.js'),
 
   clean: {
-    build: ['<%= themeDir %>/style.css','<%= themeDir %>/js/main.js']
+    build: ['<%= themeDir %>/psikon/style.css','<%= themeDir %>/psikon/js/main.js', 'build'],
+    composerInstaller: ['composer-setup.php'],
+    php: ['vendor','wordpress','composer.phar','composer.lock']
   },
   
   curl: {
-	  wordpress: {
-		  src: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
-		  dest: 'build/downloads/fluida.zip'
-	  }
+    wordpress: {
+      src: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
+      dest: 'build/downloads/fluida.zip'
+    },
+    composerInstaller: {
+      src: 'https://getcomposer.org/installer',
+      dest: 'composer-setup.php'
+    }
   },
 
   copy: {
@@ -20,7 +26,7 @@ var config = {
       files: [{
         expand: true,
         src: ['**/*.php'],
-        dest: '<%= themeDir %>',
+        dest: '<%= themeDir %>/psikon',
         cwd: './pages'
       }]
     },
@@ -42,12 +48,11 @@ var config = {
     }
   },
 
-  watch: {
-	  
-	plugins: {
-		files: ['plugins/**/*'],
-		tasks: ['copy:plugins']
-	},
+  watch: {  
+    plugins: {
+		  files: ['plugins/**/*'],
+  		tasks: ['copy:plugins']
+	  },
     pages: {
       files: ['pages/**/*.php'],
       tasks: ['copy:pages']
@@ -80,7 +85,7 @@ var config = {
     dist: {
       files: [{
     	  src: './sass/main.scss',
-    	  dest: '<%= themeDir %>/style.css',
+    	  dest: '<%= themeDir %>/psikon/style.css',
     	  expand: false
       }]
     },
@@ -97,8 +102,8 @@ var config = {
         text: '<%= cssHeader %>'
       },
       files: [{
-    	  src: '<%= themeDir %>/style.css',
-    	  dest: '<%= themeDir %>/style.css',
+    	  src: '<%= themeDir %>/psikon/style.css',
+    	  dest: '<%= themeDir %>/psikon/style.css',
     	  expand: false
       }]
     }
@@ -109,7 +114,20 @@ var config = {
 		  src: 'build/downloads/fluida.zip',
 		  dest: '<%= themeDir %>'
 	  }
-  }
+  },
+
+  exec: {
+    installComposer: {
+      command: 'php composer-setup.php',
+      stdout: true,
+      stderr: true
+    },
+    composer: {
+      command: 'php composer.phar install',
+      stdout: true,
+      stderr: true
+    }
+  },
 }
 
 
@@ -121,9 +139,11 @@ module.exports = function(grunt) {
 
   grunt.initConfig(config);
 
-  grunt.registerTask('init', ['curl:wordpress']);
+  grunt.registerTask('init-composer', ['curl:composerInstaller', 'exec:installComposer', 'exec:composer','clean:composerInstaller']);
+
+  grunt.registerTask('init', ['init-composer', 'curl:wordpress','unzip:fluida']);
   
-  grunt.registerTask('build', ['browserify:dist','sass:dist','header:dist','copy']);
+  grunt.registerTask('build', ['clean:build','browserify:dist','sass:dist','header:dist','copy']);
 
   grunt.registerTask('default', ['build']);
 
