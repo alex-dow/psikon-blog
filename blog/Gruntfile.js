@@ -7,11 +7,12 @@ var config = {
   clean: {
     build: ['<%= themeDir %>/psikon/style.css','<%= themeDir %>/psikon/js/main.js', 'build'],
     composerInstaller: ['composer-setup.php'],
-    php: ['vendor','wordpress','composer.phar','composer.lock']
+    php: ['vendor','wordpress','composer.phar','composer.lock'],
+	parentTheme: ['<%= themeDir %>/fluida']
   },
   
   curl: {
-    wordpress: {
+    parentTheme: {
       src: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
       dest: 'build/downloads/fluida.zip'
     },
@@ -141,7 +142,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('init-composer', ['curl:composerInstaller', 'exec:installComposer', 'exec:composer','clean:composerInstaller']);
 
-  grunt.registerTask('init', ['init-composer', 'curl:wordpress','unzip:fluida']);
+  grunt.registerTask('init-theme', ['curl:parentTheme','clean:parentTheme','unzip:fluida']);
+  
+  grunt.registerTask('init', ['init-composer', 'init-theme', 'build']);
   
   grunt.registerTask('build', ['clean:build','browserify:dist','sass:dist','header:dist','copy']);
 
