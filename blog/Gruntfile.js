@@ -1,3 +1,6 @@
+
+var plugins = ['project-widget'];
+
 var config = {
   pluginDir: './wordpress/wp-content/plugins',
   themeDir: './wordpress/wp-content/themes',
@@ -8,7 +11,7 @@ var config = {
     build: ['<%= themeDir %>/psikon/style.css','<%= themeDir %>/psikon/js/main.js', 'build'],
     composerInstaller: ['composer-setup.php'],
     php: ['vendor','wordpress','composer.phar','composer.lock'],
-	parentTheme: ['<%= themeDir %>/fluida']
+  	parentTheme: ['<%= themeDir %>/fluida']
   },
   
   curl: {
@@ -30,14 +33,6 @@ var config = {
         dest: '<%= themeDir %>/psikon',
         cwd: './pages'
       }]
-    },
-    plugins: {
-		files: [{
-			expand: true,
-			src: ['**/*'],
-			dest: '<%= pluginDir %>',
-			cwd: './plugins'
-		}]
     }
   },
 
@@ -50,10 +45,6 @@ var config = {
   },
 
   watch: {  
-    plugins: {
-		  files: ['plugins/**/*'],
-  		tasks: ['copy:plugins']
-	  },
     pages: {
       files: ['pages/**/*.php'],
       tasks: ['copy:pages']
@@ -90,11 +81,6 @@ var config = {
     	  expand: false
       }]
     },
-    dev: {
-      files: {
-        './static/style.css': './sass/main.scss'
-      }
-    }
   },
 
   header: {
@@ -132,21 +118,85 @@ var config = {
 }
 
 
+var plugins = ['project-widget'];
 
+for (var i = 0; i < plugins.length; i++) {
+
+  var name = plugins[i];
+
+  config['browserify'][name + '-admin'] = {
+    src: ['plugins/' + name + '/js/admin-main.js'],
+    dest: '<%= pluginDir %>/' + name + '/js/admin-main.js',
+    options: {
+      transform: [
+        'browserify-shim',
+        [ 'hbsfy', { 'extensions': 'html' } ]
+      ]
+    }
+  };
+  
+  config['browserify'][name + '-main'] = {
+    src: ['plugins/' + name + '/js/main.js'],
+    dest: '<%= pluginDir %>/' + name + '/js/main.js',
+    options: {
+      transform: [
+        'browserify-shim',
+        [ 'hbsfy', { 'extensions': 'html' } ]
+      ]
+    }
+  };
+
+  config['copy'][name] = {
+    files: [{
+      expand: true,
+      src: ['**/*.php'],
+      dest: '<%= pluginDir %>/' + name,
+      cwd: './plugins/' + name
+    }]
+  };
+
+  config['clean'][name] = ['<%= pluginDir %>/' + name];
+
+  config['watch'][name + '-php'] = {
+    files: ['./plugins/' + name + '/**/*.php'],
+    tasks: ['copy:' + name]
+  };
+
+  config['watch'][name + '-js'] = {
+    files: ['./plugins/' + name + '/**/*.js', './plugins/' + name + '/templates/handlebars/**/*.html'],
+    tasks: ['browserify:' + name + '-admin','browserify:' + name + '-main']
+  };
+};
 
 module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig(config);
+  
+  var buildpluginstask = [];
+
+  for (var i = 0; i < plugins.length; i++) {
+    var name = plugins[i];
+    grunt.registerTask('build-plugin-' + name, [
+      'clean:' + name, 
+      'browserify:' + name + '-main', 
+      'browserify:' + name + '-admin', 
+      'copy:' + name
+    ]);
+    grunt.registerTask('watch-' + name, ['watch:' + name + '-php', 'watch: ' + name + '-js']);
+    buildpluginstask.push('build-plugin-' + name);
+  }
+  
+  grunt.registerTask('build-plugins', buildpluginstask);
 
   grunt.registerTask('init-composer', ['curl:composerInstaller', 'exec:installComposer', 'exec:composer','clean:composerInstaller']);
 
   grunt.registerTask('init-theme', ['curl:parentTheme','clean:parentTheme','unzip:fluida']);
   
   grunt.registerTask('init', ['init-composer', 'init-theme', 'build']);
-  
-  grunt.registerTask('build', ['clean:build','browserify:dist','sass:dist','header:dist','copy']);
+
+  grunt.registerTask('build', ['build-plugins', 'clean:build','browserify:dist','sass:dist','header:dist','copy']);
 
   grunt.registerTask('default', ['build']);
 

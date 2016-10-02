@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,6 +18,8 @@
     "slicknav": "^1.0.8"
   },
   "devDependencies": {
+    "browserify-shim": "^3.8.12",
+    "browserify-underscore-template": "0.0.3",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-clean": "^1.0.0",
@@ -27,6 +32,8 @@
     "grunt-sass": "^1.2.1",
     "grunt-spritesmith": "^6.3.1",
     "grunt-zip": "^0.17.1",
+    "handlebars": "^4.0.5",
+    "hbsfy": "^2.7.0",
     "load-grunt-tasks": "^3.5.2"
   }
 }
