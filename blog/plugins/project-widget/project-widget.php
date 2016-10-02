@@ -39,51 +39,6 @@ add_action('widgets_init', function() {
     register_widget('ProjectWidget');
 });
 
-function project_widget_settings_page() {
-    include('templates/admin-form.php');
-}
-
-add_action('admin_menu', 'project_widget_create_menu');
-
-function project_widget_create_menu() {
-
-    //create new top-level menu
-    add_menu_page('Psikon - Project Widget', 'Settings', 'administrator', __FILE__, 'project_widget_settings_page' , plugins_url('/images/icon-small.png', __FILE__) );
-
-    //call register settings function
-    // add_action( 'admin_init', 'register_my_cool_plugin_settings' );
-}
-
-function project_widget_ajax_add_project() {
-    
-    global $wpdb;
-    
-    $table_name = $wpdb->prefix .'psikon_project_widget_projects';
-    
-    header('Content-type', 'application/json');
-    
-    try {
-        
-        $wpdb->insert($table_name, array(
-            'projectName' => $_POST['project-name'],
-            'projectId' => $_POST['project-id'],
-            'sonarId' => $_POST['project-sonar-id'],
-            'jenkinsId' => $_POST['project-jenkins-id']
-        ));
-        
-        echo json_encode(array('ok' => true));
-        
-    } catch (Exception $e) {
-        echo json_encode(array('ok' => false)); 
-    }
-    
-    wp_die();
-}
-
-if (is_admin()) {
-    add_action('wp_ajax_project_widget_add_project', 'project_widget_ajax_add_project');
-}
-
 function project_widget_get_projects() {
   global $wpdb;
 
@@ -118,4 +73,5 @@ function project_widget_install() {
 
 register_activation_hook(__FILE__, 'project_widget_install');
 
+require_once('admin/init.php');
 ?>
