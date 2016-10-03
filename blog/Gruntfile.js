@@ -1,5 +1,14 @@
-
 var plugins = ['project-widget'];
+
+var vendor_plugins = [
+    ['wp-mail-smtp','0.9.6']
+];
+
+var vendor_themes = [
+    ['fluida', '0.9.9.3']
+];
+
+
 
 var config = {
   pluginDir: './wordpress/wp-content/plugins',
@@ -15,10 +24,6 @@ var config = {
   },
   
   curl: {
-    parentTheme: {
-      src: 'https://downloads.wordpress.org/theme/fluida.0.9.9.3.zip',
-      dest: 'build/downloads/fluida.zip'
-    },
     composerInstaller: {
       src: 'https://getcomposer.org/installer',
       dest: 'composer-setup.php'
@@ -113,8 +118,40 @@ var config = {
   },
 }
 
+function install_vendor(name, version, type) {
+    var downloadUrl;
+    var dest;
+    
+    if (type == 'plugins') {
+        downloadUrl = 'https://downloads.wordpress.org/plugin/' + name + '.' + version + '.zip';
+        dest = '<%=pluginDir%>';
+    } else {
+        downloadUrl = 'https://downloads.wordpress.org/theme/' + name + '.' + version + '.zip';
+        dest = '<%=themeDir%>';
+    }
+    
+    config['curl'][name] = {
+        src: downloadUrl,
+        dest: 'build/downloads/' + type + '/' + name + '.zip'
+    };
+    
+    config['unzip'][name] = {
+        src: 'build/downloads/' + type + '/' + name + '.zip',
+        dest: dest
+    };
+    
+    config['clean'][name] = {
+        src: dest + '/' + name
+    };
+}
 
-var plugins = ['project-widget'];
+for (var i = 0; i < vendor_plugins.length; i++) {
+    install_vendor(vendor_plugins[i][0],vendor_plugins[i][1],'plugins');
+}
+
+for (var i = 0; i < vendor_themes.length; i++) {
+    install_vendor(vendor_themes[i][0],vendor_themes[i][1],'themes');
+}
 
 for (var i = 0; i < plugins.length; i++) {
 
@@ -190,13 +227,36 @@ module.exports = function(grunt) {
     buildpluginstask.push('build-plugin-' + name);
   }
   
+  var vendorplugintask = [];
+  for (var i = 0; i < vendor_plugins.length; i++) {
+      var name = vendor_plugins[i][0];
+      grunt.registerTask('install-vendor-plugin-' + name, [
+          'clean:' + name,
+          'curl:' + name,
+          'unzip:' + name
+      ]);
+      vendorplugintask.push('install-vendor-plugin-' + name);
+  }
+  
+  var vendorthemestask = [];
+  for (var i = 0; i < vendor_themes.length; i++) {
+      var name = vendor_themes[i][0];
+      grunt.registerTask('install-vendor-theme-' + name, [
+          'clean:' + name,
+          'curl:' + name,
+          'unzip:' + name
+      ]);
+      vendorplugintask.push('install-vendor-theme-' + name);
+  }  
+  
+  grunt.registerTask('vendor-plugins', vendorplugintask);
+  grunt.registerTask('vendor-themes', vendorthemestask);
+  
   grunt.registerTask('build-plugins', buildpluginstask);
 
   grunt.registerTask('init-composer', ['curl:composerInstaller', 'exec:installComposer', 'exec:composer','clean:composerInstaller']);
 
-  grunt.registerTask('init-theme', ['curl:parentTheme','clean:parentTheme','unzip:fluida']);
-  
-  grunt.registerTask('init', ['init-composer', 'init-theme', 'build']);
+  grunt.registerTask('init', ['init-composer', 'vendor-themes', 'vendor-plugins', 'build']);
 
   grunt.registerTask('build', ['build-plugins', 'clean:build','browserify:dist','sass:dist','header:dist','copy']);
 
