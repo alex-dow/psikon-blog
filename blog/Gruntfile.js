@@ -56,10 +56,6 @@ var config = {
     scss: {
       files: ['sass/**/*.scss'],
       tasks: ['sass:dist','header:dist']
-    },
-    dev: {
-      files: ['sass/**/*.scss'],
-      tasks: ['sass:dev']
     }
   },
 
@@ -127,6 +123,9 @@ for (var i = 0; i < plugins.length; i++) {
   config['browserify'][name + '-admin'] = {
     src: ['plugins/' + name + '/js/admin-main.js'],
     dest: '<%= pluginDir %>/' + name + '/js/admin-main.js',
+    browserifyOptions: {
+        debug: true
+    },
     options: {
       transform: [
         'browserify-shim',
@@ -138,6 +137,9 @@ for (var i = 0; i < plugins.length; i++) {
   config['browserify'][name + '-main'] = {
     src: ['plugins/' + name + '/js/main.js'],
     dest: '<%= pluginDir %>/' + name + '/js/main.js',
+    browserifyOptions: {
+        debug: true
+    },    
     options: {
       transform: [
         'browserify-shim',
