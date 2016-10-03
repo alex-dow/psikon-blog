@@ -5,7 +5,8 @@ var vendor_plugins = [
     ['crayon-syntax-highlighter',null],
     ['wp-recaptcha-integration', '1.1.10'],
     ['all-in-one-wp-migration', '5.52'],
-    ['google-analytics-for-wordpress', '5.5.2']
+    ['google-analytics-for-wordpress', '5.5.2'],
+    ['custom-user-profile-photo', '0.5.1']
 ];
 
 var vendor_themes = [
@@ -238,6 +239,7 @@ module.exports = function(grunt) {
   }
   
   var vendorplugintask = [];
+  var vendorcleanplugintask = [];
   for (var i = 0; i < vendor_plugins.length; i++) {
       var name = vendor_plugins[i][0];
       grunt.registerTask('install-vendor-plugin-' + name, [
@@ -246,9 +248,11 @@ module.exports = function(grunt) {
           'unzip:' + name
       ]);
       vendorplugintask.push('install-vendor-plugin-' + name);
+      vendorcleanplugintask.push('clean:' + name);
   }
   
   var vendorthemestask = [];
+  var vendorcleanthemetask = [];
   for (var i = 0; i < vendor_themes.length; i++) {
       var name = vendor_themes[i][0];
       grunt.registerTask('install-vendor-theme-' + name, [
@@ -257,10 +261,14 @@ module.exports = function(grunt) {
           'unzip:' + name
       ]);
       vendorthemestask.push('install-vendor-theme-' + name);
+      vendorcleanthemetask.push('clean:' + name);
   }  
   
   grunt.registerTask('vendor-plugins', vendorplugintask);
   grunt.registerTask('vendor-themes', vendorthemestask);
+  
+  grunt.registerTask('clean-vendor-plugins', vendorcleanplugintask);
+  grunt.registerTask('clean-vendor-themes', vendorcleanthemetask);
   
   grunt.registerTask('build-plugins', buildpluginstask);
 
