@@ -28,6 +28,11 @@
 						<input type="text" name="project-jenkins-id" id="project-jenkins-id" size="40" aria-required="true">
 						<p>Change this if the ID of your project in Jenkins is different</p>
 					</div>
+					<div class="form-field">
+						<label for="project-github-url">Github URL</label>
+						<input type="text" name="project-github-url" id="project-github-url" size="40" aria-required="true">
+						<p>Just include the path, not the domain name</p>
+					</div>					
 					<div class="form-field" id="add-project-submit-container">
 						<button class="button" type="submit">Add Project</button>
 					</div>					

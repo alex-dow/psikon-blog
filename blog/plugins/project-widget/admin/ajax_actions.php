@@ -24,7 +24,8 @@ function project_widget_ajax_add_project() {
             'projectName' => $_POST['project-name'],
             'projectId' => $_POST['project-id'],
             'sonarId' => $_POST['project-sonar-id'],
-            'jenkinsId' => $_POST['project-jenkins-id']
+            'jenkinsId' => $_POST['project-jenkins-id'],
+            'githubUrl' => $_POST['project-github-url']
         ));
 
         echo json_encode(array('ok' => true));

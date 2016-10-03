@@ -9,7 +9,16 @@
 	<tbody id="pw-table-body">
 	<?php foreach ($results as $result) { ?>
 		<tr id="<?php echo $result['projectId']; ?>-project">
-			<td class="pw-project-title"><?php echo $result['projectName']; ?></td>
+			<td class="pw-project-title">
+			<?php if ($result['githubUrl']) { ?>
+			
+				<a href="https://github.com/<?php echo $result['githubUrl']; ?>" target="_blank">
+					<?php echo $result['projectName']; ?>
+				</a>
+			<?php } else { ?>
+			    <?php echo $result['projectName']; ?>
+			<?php } ?>
+			</td>
 			<td class="pw-project-build-status" id="<?php echo $result['projectId']; ?>-build-status">
 				<img src="/wp-includes/images/spinner.gif">
 			</td>
