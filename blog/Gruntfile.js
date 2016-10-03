@@ -7,7 +7,8 @@ var vendor_plugins = [
     ['all-in-one-wp-migration', '5.52'],
     ['google-analytics-for-wordpress', '5.5.2'],
     ['custom-user-profile-photo', '0.5.1'],
-    ['tagaroo', '1.5.3']
+    ['tagaroo', '1.5.3'],
+    ['fantastic-elasticsearch','4.1.0']
 ];
 
 var vendor_themes = [
