@@ -6,7 +6,8 @@ var vendor_plugins = [
     ['wp-recaptcha-integration', '1.1.10'],
     ['all-in-one-wp-migration', '5.52'],
     ['google-analytics-for-wordpress', '5.5.2'],
-    ['custom-user-profile-photo', '0.5.1']
+    ['custom-user-profile-photo', '0.5.1'],
+    ['tagaroo', '1.5.3']
 ];
 
 var vendor_themes = [
