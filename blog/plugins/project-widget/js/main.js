@@ -7,7 +7,6 @@ var tplProjectStatistics = require('../templates/handlebars/project-statistics.h
 var ajaxurl = ajax_object.ajax_url;
 
 function secondsToHms(d) {
-    console.log('wtf: ', d);
     d = parseInt(d);
     var h = Math.floor(d / 3600);
     var m = Math.floor((d - (h * 3600)) / 60);
@@ -74,8 +73,6 @@ function initProjectBuild(projectId) {
     .then(function(response) {
         var values = response.response[0].cells;
         
-        console.log(response.response[0]);
-        
         var cov = [];
         var ncloc = [];
         
@@ -108,7 +105,6 @@ function initProjectBuild(projectId) {
 }
 
 function getProjectStatistics(projectId) {
-    console.log('Project ID: ', projectId);
     return jQuery.ajax({
         url: ajaxurl,
         data: {
@@ -154,7 +150,4 @@ jQuery(document).ready(function() {
         var projectId = el.id.replace('-project','');
         initProjectBuild(projectId);
     });
-    // initProjectBuild('icuify');
-    //console.log(jQuery('div[data-sparkline]'));
-    //Sparkline(jQuery("div[data-sparkline]"));
 });

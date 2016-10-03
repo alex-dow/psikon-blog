@@ -13,8 +13,6 @@ function onLoad() {
     
     getProjects()
     .done(function(response) {
-        console.log(typeof response);
-        console.log(response.length);
        jQuery('#project-list').html('');
        for (var i = 0; i < response.length; i++) {
            addProjectRow({
@@ -140,7 +138,6 @@ function get_project_metadata(project) {
             categories: 'Version'
         }
     }).done(function(response) {
-        console.log(response);
       jQuery('#' + project + '-sonar-metadata').html('Version: ' + response.response[0].n); 
     }).fail(function() {
       jQuery('#' + project + '-sonar-metadata').html('Unable to load Sonar data!');
@@ -148,7 +145,6 @@ function get_project_metadata(project) {
     
     jenkinsQuery(project)
     .done(function(response) {
-        console.log(response);
         if (response.response.color == 'red') {
             jQuery('#' + project + '-jenkins-metadata').html('Builds are failing!');
         } else {
