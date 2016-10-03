@@ -1,11 +1,14 @@
 var plugins = ['project-widget'];
 
 var vendor_plugins = [
-    ['wp-mail-smtp','0.9.6']
+    ['wp-mail-smtp','0.9.6'],
+    ['crayon-syntax-highlighter',null],
+    ['wp-recaptcha-integration', '1.1.10'],
+    ['all-in-one-wp-migration', '5.52']
 ];
 
 var vendor_themes = [
-    ['fluida', '0.9.9.3']
+    ['fluida', '0.9.9.4']
 ];
 
 
@@ -123,12 +126,18 @@ function install_vendor(name, version, type) {
     var dest;
     
     if (type == 'plugins') {
-        downloadUrl = 'https://downloads.wordpress.org/plugin/' + name + '.' + version + '.zip';
+        downloadUrl = 'https://downloads.wordpress.org/plugin/' + name;
         dest = '<%=pluginDir%>';
     } else {
-        downloadUrl = 'https://downloads.wordpress.org/theme/' + name + '.' + version + '.zip';
+        downloadUrl = 'https://downloads.wordpress.org/theme/' + name;
         dest = '<%=themeDir%>';
     }
+
+    if (version != null) {
+      downloadUrl += '.' + version;
+    }
+
+    downloadUrl += '.zip';
     
     config['curl'][name] = {
         src: downloadUrl,
@@ -246,7 +255,7 @@ module.exports = function(grunt) {
           'curl:' + name,
           'unzip:' + name
       ]);
-      vendorplugintask.push('install-vendor-theme-' + name);
+      vendorthemestask.push('install-vendor-theme-' + name);
   }  
   
   grunt.registerTask('vendor-plugins', vendorplugintask);
