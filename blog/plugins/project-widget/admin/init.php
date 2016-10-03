@@ -7,7 +7,7 @@ function project_widget_create_menu() {
 
     //create new top-level menu
     
-    add_menu_page('Psikon - Project Widget', 'PW Projects', 'administrator', __FILE__, 'project_widget_projects_page' , plugins_url('/images/icon-small.png', __FILE__) );
+    add_menu_page('Psikon - Project Widget', 'PW Projects', 'administrator', __FILE__, 'project_widget_projects_page' );
 
     //call register settings function
     // add_action( 'admin_init', 'register_my_cool_plugin_settings' );

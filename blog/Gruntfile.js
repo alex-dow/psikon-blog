@@ -8,7 +8,7 @@ var config = {
   cssHeader: require('./cssHeader.js'),
 
   clean: {
-    build: ['<%= themeDir %>/psikon/style.css','<%= themeDir %>/psikon/js/main.js', 'build'],
+    build: ['<%= themeDir %>/psikon', 'build'],
     composerInstaller: ['composer-setup.php'],
     php: ['vendor','wordpress','composer.phar','composer.lock'],
   	parentTheme: ['<%= themeDir %>/fluida']
