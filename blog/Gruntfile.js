@@ -4,7 +4,8 @@ var vendor_plugins = [
     ['wp-mail-smtp','0.9.6'],
     ['crayon-syntax-highlighter',null],
     ['wp-recaptcha-integration', '1.1.10'],
-    ['all-in-one-wp-migration', '5.52']
+    ['all-in-one-wp-migration', '5.52'],
+    ['google-analytics-for-wordpress', '5.5.2']
 ];
 
 var vendor_themes = [
