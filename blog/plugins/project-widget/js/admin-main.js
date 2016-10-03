@@ -58,7 +58,7 @@ function jenkinsQuery(projectId) {
     
     var args = {
       'project-id': projectId,
-      'action': 'project_widget_admin_ajax_jenkins'
+      'action': 'project_widget_admin_jenkins'
     };
     
     return jQuery.ajax({
@@ -70,7 +70,7 @@ function jenkinsQuery(projectId) {
 }
 
 function sonarQuery(args) {
-    args['action'] = 'project_widget_admin_ajax_sonar';
+    args['action'] = 'project_widget_admin_sonar';
 
     return jQuery.ajax({
         url: ajaxurl,
