@@ -45,6 +45,7 @@ function project_widget_ajax_sonar() {
     ];
 
     $sonar_response = file_get_contents($url);
+
     $response['response'] = json_decode($sonar_response);
 
     header('Content-type: application/json');
@@ -52,6 +53,6 @@ function project_widget_ajax_sonar() {
     wp_die();
 }
 if (is_admin()) {
-    add_action('wp_ajax_project_widget_admin_sonar','project_widget_ajax_sonar');
+    add_action('wp_ajax_project_widget_sonar','project_widget_ajax_sonar');
 }
-add_action('wp_ajax_project_widget_sonar','project_widget_ajax_sonar');
+add_action('wp_ajax_nopriv_project_widget_sonar','project_widget_ajax_sonar');
